@@ -22,9 +22,6 @@ class Employee
     #[ORM\Column(length: 40, nullable: false)]
     private string $lastName;
 
-    #[ORM\Column(nullable: false)]
-    private int $roleId;
-
     #[ORM\Column(length: 255, nullable: false)]
     private string $passwordHash;
 
@@ -37,9 +34,14 @@ class Employee
     #[ORM\OneToMany(targetEntity: Deal::class, mappedBy: 'employee')]
     private Collection $deals;
 
+    #[ORM\ManyToOne(inversedBy: 'employees')]
+    #[ORM\JoinColumn(nullable: false)]
+    private Roles $role;
+
     public function __construct()
     {
         $this->deals = new ArrayCollection();
+        $this->createdAt = new \DateTime();
     }
 
     public function getEmployeeId(): ?int
@@ -74,18 +76,6 @@ class Employee
     public function setLastName(string $lastName): static
     {
         $this->lastName = $lastName;
-
-        return $this;
-    }
-
-    public function getRoleId(): int
-    {
-        return $this->roleId;
-    }
-
-    public function setRoleId(int $roleId): static
-    {
-        $this->roleId = $roleId;
 
         return $this;
     }
@@ -135,6 +125,18 @@ class Employee
     public function removeDeal(Deal $deal): static
     {
         $this->deals->removeElement($deal);
+        return $this;
+    }
+
+    public function getRole(): Roles
+    {
+        return $this->role;
+    }
+
+    public function setRole(Roles $role): static
+    {
+        $this->role = $role;
+
         return $this;
     }
 }
