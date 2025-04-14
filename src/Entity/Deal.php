@@ -37,6 +37,10 @@ class Deal
     #[ORM\JoinColumn(nullable: false)]
     private Stage $stage;
 
+    #[ORM\ManyToOne(inversedBy: 'deals')]
+    #[ORM\JoinColumn(nullable: false)]
+    private Employee $employee;
+
     public function getDealId(): ?int
     {
         return $this->dealId;
@@ -53,14 +57,14 @@ class Deal
         return $this;
     }
 
-    public function getEmployeeId(): int
+    public function getEmployee(): Employee
     {
-        return $this->employeeId;
+        return $this->employee;
     }
 
-    public function setEmployeeId(int $employeeId): static
+    public function setEmployee(Employee $employee): static
     {
-        $this->employeeId = $employeeId;
+        $this->employee= $employee;
         return $this;
     }
 
