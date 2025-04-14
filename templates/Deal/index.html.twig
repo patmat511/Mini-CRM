@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Deal index{% endblock %}
+
+{% block body %}
+    <h1>Deal index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>DealId</th>
+                <th>EmployeeId</th>
+                <th>Title</th>
+                <th>Amount</th>
+                <th>CreatedAt</th>
+                <th>ClosedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for deal in deals %}
+            <tr>
+                <td>{{ deal.dealId }}</td>
+                <td>{{ deal.employeeId }}</td>
+                <td>{{ deal.title }}</td>
+                <td>{{ deal.amount }}</td>
+                <td>{{ deal.createdAt ? deal.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ deal.closedAt ? deal.closedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_deal_show', {'dealId': deal.dealId}) }}">show</a>
+                    <a href="{{ path('app_deal_edit', {'dealId': deal.dealId}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_deal_new') }}">Create new</a>
+{% endblock %}
