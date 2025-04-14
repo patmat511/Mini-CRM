@@ -22,7 +22,9 @@ The CRM system stores and organizes data related to customers, employees, and sa
 
 Below is the diagram of the database schema for the CRM system:
 
-![image](https://github.com/user-attachments/assets/d2046009-c7e6-4327-9c43-6f03133af31e)
+![image](https://github.com/user-attachments/assets/afde6407-097a-4abd-aa4e-42e36065c141)
+
+
 
 
 ## Installation
