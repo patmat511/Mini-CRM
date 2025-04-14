@@ -22,6 +22,9 @@ class Employee
     #[ORM\Column(length: 40, nullable: false)]
     private string $lastName;
 
+    #[ORM\Column(length: 40, nullable: false)]
+    private string $email;
+
     #[ORM\Column(length: 255, nullable: false)]
     private string $passwordHash;
 
@@ -136,6 +139,18 @@ class Employee
     public function setRole(Roles $role): static
     {
         $this->role = $role;
+
+        return $this;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
 
         return $this;
     }
