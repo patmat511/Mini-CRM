@@ -12,7 +12,7 @@ class Stage
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name: "stage_id")]
     private ?int $stageId = null;
 
     #[ORM\Column(length: 50, nullable: false)]

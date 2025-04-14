@@ -13,7 +13,7 @@ class Employee
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name: "employee_id")]
     private ?int $employeeId = null;
 
     #[ORM\Column(length: 40, nullable: false)]
@@ -35,7 +35,7 @@ class Employee
     private Collection $deals;
 
     #[ORM\ManyToOne(inversedBy: 'employees')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: "role_id", referencedColumnName: "role_id")]
     private Roles $role;
 
     public function __construct()

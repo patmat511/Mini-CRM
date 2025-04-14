@@ -12,7 +12,7 @@ class Customer
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name: "customer_id")]
     private ?int $customerId = null;
 
     #[ORM\Column(length: 40, nullable: false)]

@@ -11,11 +11,11 @@ class Deal
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name: "deal_id")]
     private ?int $dealId = null;
 
     #[ORM\ManyToOne(inversedBy: 'deals')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: "customer_id", referencedColumnName: "customer_id")]
     private Customer $customer;
 
     #[ORM\Column(nullable: false)]
@@ -34,11 +34,11 @@ class Deal
     private ?\DateTimeInterface $closedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'deals')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: "stage_id", referencedColumnName: "stage_id")]
     private Stage $stage;
 
     #[ORM\ManyToOne(inversedBy: 'deals')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: "employee_id", referencedColumnName: "employee_id", nullable: false)]
     private Employee $employee;
 
     public function getDealId(): ?int

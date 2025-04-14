@@ -12,7 +12,7 @@ class Roles
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name: "role_id")]
     private ?int $roleId = null;
 
     #[ORM\Column(length: 50, nullable: false)]
