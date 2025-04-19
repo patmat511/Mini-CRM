@@ -7,9 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
-class Employee
+class Employee implements  UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -27,6 +29,8 @@ class Employee
 
     #[ORM\Column(length: 255, nullable: false)]
     private string $passwordHash;
+
+    private ?string $plainPassword = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
     private \DateTimeInterface $createdAt;
@@ -68,6 +72,17 @@ class Employee
     {
         $this->firstName = $firstName;
 
+        return $this;
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): static
+    {
+        $this->plainPassword = $plainPassword;
         return $this;
     }
 
@@ -153,5 +168,28 @@ class Employee
         $this->email = $email;
 
         return $this;
+    }
+
+
+    // Applying functions required for UserInterface
+    public function getRoles(): array
+    {
+        $roleName = $this->role ? $this->role->getRoleName() : 'ROLE_USER';
+        return [$roleName];
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->email;
+    }
+
+    public function getPassword(): string
+    {
+        return $this->passwordHash;
+    }
+
+    public function eraseCredentials(): void
+    {
+        $this->plainPassword = null;
     }
 }

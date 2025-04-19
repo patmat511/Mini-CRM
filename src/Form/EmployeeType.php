@@ -6,6 +6,7 @@ use App\Entity\Employee;
 use App\Entity\Roles;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,13 +18,18 @@ class EmployeeType extends AbstractType
             ->add('firstName')
             ->add('lastName')
             ->add('email')
-            ->add('passwordHash')
+            ->add('plainPassword', PasswordType::class, [
+                'mapped' => false,
+                'required' => false,
+                'label' => 'password',
+            ])
             ->add('createdAt', null, [
                 'widget' => 'single_text',
             ])
             ->add('role', EntityType::class, [
                 'class' => Roles::class,
-                'choice_label' => 'id',
+                'choice_label' => 'roleName',
+                'choice_value' => 'roleId',
             ])
         ;
     }

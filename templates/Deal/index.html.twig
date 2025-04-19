@@ -21,7 +21,7 @@
         {% for deal in deals %}
             <tr>
                 <td>{{ deal.dealId }}</td>
-                <td>{{ deal.employeeId }}</td>
+                <td>{{ deal.employee.employeeId }}</td>
                 <td>{{ deal.title }}</td>
                 <td>{{ deal.amount }}</td>
                 <td>{{ deal.createdAt ? deal.createdAt|date('Y-m-d H:i:s') : '' }}</td>
