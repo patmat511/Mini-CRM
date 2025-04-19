@@ -3,9 +3,13 @@
 {% block title %}New Employee{% endblock %}
 
 {% block body %}
-    <h1>Create new Employee</h1>
+    <div class="container mt-5">
+        <h1 class="mb-4">Create New Employee</h1>
 
-    {{ include('employee/_form.html.twig') }}
+        {{ include('employee/_form.html.twig') }}
 
-    <a href="{{ path('app_employee_index') }}">back to list</a>
+        <div class="mt-3">
+            <a href="{{ path('app_employee_index') }}" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
 {% endblock %}

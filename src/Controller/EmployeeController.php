@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[Route('/employee')]
 final class EmployeeController extends AbstractController
@@ -23,13 +24,21 @@ final class EmployeeController extends AbstractController
     }
 
     #[Route('/new', name: 'app_employee_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         $employee = new Employee();
         $form = $this->createForm(EmployeeType::class, $employee);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $plainPassword = $form->get('plainPassword')->getData();
+            if ($plainPassword) {
+                $hashedPassword = $passwordHasher->hashPassword($employee, $plainPassword);
+                $employee->setPasswordHash($hashedPassword);
+            } else {
+                throw new \LogicException('Hasło jest wymagane przy tworzeniu nowego pracownika.');
+            }
+
             $entityManager->persist($employee);
             $entityManager->flush();
 
@@ -43,20 +52,38 @@ final class EmployeeController extends AbstractController
     }
 
     #[Route('/{employeeId}', name: 'app_employee_show', methods: ['GET'])]
-    public function show(Employee $employee): Response
+    public function show(int $employeeId, EmployeeRepository $employeeRepository): Response
     {
+        $employee = $employeeRepository->find($employeeId);
+
+        if (!$employee) {
+            throw $this->createNotFoundException('Pracownik o ID '.$employeeId.' nie istnieje.');
+        }
+
         return $this->render('employee/show.html.twig', [
             'employee' => $employee,
         ]);
     }
 
     #[Route('/{employeeId}/edit', name: 'app_employee_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Employee $employee, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, int $employeeId, EmployeeRepository $employeeRepository, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
+        $employee = $employeeRepository->find($employeeId);
+
+        if (!$employee) {
+            throw $this->createNotFoundException('Pracownik o ID '.$employeeId.' nie istnieje.');
+        }
+
         $form = $this->createForm(EmployeeType::class, $employee);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $plainPassword = $form->get('plainPassword')->getData();
+            if ($plainPassword) {
+                $hashedPassword = $passwordHasher->hashPassword($employee, $plainPassword);
+                $employee->setPasswordHash($hashedPassword);
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_employee_index', [], Response::HTTP_SEE_OTHER);
@@ -69,8 +96,14 @@ final class EmployeeController extends AbstractController
     }
 
     #[Route('/{employeeId}', name: 'app_employee_delete', methods: ['POST'])]
-    public function delete(Request $request, Employee $employee, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, int $employeeId, EmployeeRepository $employeeRepository, EntityManagerInterface $entityManager): Response
     {
+        $employee = $employeeRepository->find($employeeId);
+
+        if (!$employee) {
+            throw $this->createNotFoundException('Pracownik o ID '.$employeeId.' nie istnieje.');
+        }
+
         if ($this->isCsrfTokenValid('delete'.$employee->getEmployeeId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($employee);
             $entityManager->flush();

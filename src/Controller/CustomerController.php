@@ -43,16 +43,28 @@ final class CustomerController extends AbstractController
     }
 
     #[Route('/{customerId}', name: 'app_customer_show', methods: ['GET'])]
-    public function show(Customer $customer): Response
+    public function show(int $customerId, CustomerRepository $customerRepository): Response
     {
+        $customer = $customerRepository->find($customerId);
+
+        if (!$customer) {
+            throw $this->createNotFoundException('Klient o ID '.$customerId.' nie istnieje.');
+        }
+
         return $this->render('customer/show.html.twig', [
             'customer' => $customer,
         ]);
     }
 
     #[Route('/{customerId}/edit', name: 'app_customer_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Customer $customer, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, int $customerId, CustomerRepository $customerRepository, EntityManagerInterface $entityManager): Response
     {
+        $customer = $customerRepository->find($customerId);
+
+        if (!$customer) {
+            throw $this->createNotFoundException('Klient o ID '.$customerId.' nie istnieje.');
+        }
+
         $form = $this->createForm(CustomerType::class, $customer);
         $form->handleRequest($request);
 
@@ -69,9 +81,15 @@ final class CustomerController extends AbstractController
     }
 
     #[Route('/{customerId}', name: 'app_customer_delete', methods: ['POST'])]
-    public function delete(Request $request, Customer $customer, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, int $customerId, CustomerRepository $customerRepository, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$customer->getCustomerId(), $request->getPayload()->getString('_token'))) {
+        $customer = $customerRepository->find($customerId);
+
+        if (!$customer) {
+            throw $this->createNotFoundException('Klient o ID '.$customerId.' nie istnieje.');
+        }
+
+        if ($this->isCsrfTokenValid('delete'.$customer->getCustomerId(), $request->getPayload()->get('_token'))) {
             $entityManager->remove($customer);
             $entityManager->flush();
         }
