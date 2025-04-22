@@ -24,7 +24,11 @@ Below is the diagram of the database schema for the CRM system:
 
 ![image](https://github.com/user-attachments/assets/afde6407-097a-4abd-aa4e-42e36065c141)
 
+## Home Page
+![image](https://github.com/user-attachments/assets/230d0ddd-b798-4ba6-86d1-d266238303ab)
 
+## CRUD Operations
+![image](https://github.com/user-attachments/assets/17092b12-eef5-41b9-a495-5edf99514308)
 
 
 ## Installation
