@@ -35,7 +35,7 @@ Below is the diagram of the database schema for the CRM system:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/patmat511/CRM-System.git
+   git clone https://github.com/patmat511/Mini-CRM.git
    ```
 2. After cloning the repository, make sure that the .env file is in the root directory.
    
