@@ -54,15 +54,15 @@ final class EmployeeController extends AbstractController
     #[Route('/{employeeId}', name: 'app_employee_show', methods: ['GET'])]
     public function show(int $employeeId, EmployeeRepository $employeeRepository): Response
     {
-        $employee = $employeeRepository->find($employeeId);
+       $employee = $employeeRepository->find($employeeId);
 
-        if (!$employee) {
-            throw $this->createNotFoundException('Pracownik o ID '.$employeeId.' nie istnieje.');
-        }
+       if (!$employee) {
+           throw $this->createNotFoundException('Nie udalo sie znalezc pracownika o ID' . $employeeId);
+       }
 
-        return $this->render('employee/show.html.twig', [
-            'employee' => $employee,
-        ]);
+       return $this->render('employee/show.html.twig', [
+           'employee' => $employee,
+       ]);
     }
 
     #[Route('/{employeeId}/edit', name: 'app_employee_edit', methods: ['GET', 'POST'])]
